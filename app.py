@@ -31,19 +31,21 @@ if uploaded_file:
         st.info("This file is already uploaded in this session.")
 
 # ---------- List & download section ----------
-st.header("📂 Available papers")
+st.header("📂 Available Papers")
 pdf_files = sorted(UPLOAD_DIR.glob("*.pdf"))
 
 if pdf_files:
-    for pdf in pdf_files:
-        with pdf.open("rb") as f:
-            st.download_button(
-    label=f"📄 {pdf.name.split('_',1)[-1]}",
-    data=f.read(),
-    file_name=pdf.name.split('_',1)[-1],
-    mime="application/pdf",
-    key=pdf.name  # 👈 this makes each button unique
-)
-
+    cols = st.columns(5)  # 5-column grid (adjust as needed)
+    for idx, pdf in enumerate(pdf_files):
+        col = cols[idx % 5]  # rotate through columns
+        with col:
+            with pdf.open("rb") as f:
+                st.download_button(
+                    label=f"📄 {pdf.name.split('_', 1)[-1]}",
+                    data=f.read(),
+                    file_name=pdf.name.split('_', 1)[-1],
+                    mime="application/pdf",
+                    key=pdf.name
+                )
 else:
     st.info("No papers uploaded yet. Add one above!")
