@@ -2,6 +2,7 @@
 import streamlit as st
 from pathlib import Path
 import datetime
+import base64
 
 # ---------- Config ----------
 UPLOAD_DIR = Path("uploads")
@@ -9,6 +10,25 @@ UPLOAD_DIR.mkdir(exist_ok=True)          # create the folder if it isn't there
 
 st.set_page_config(page_title="Question‑Paper Bank", page_icon="📚")
 st.title("📚 Previous‑Semester Question Papers")
+
+# -------- Background --------
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as img_file:
+        encoded_string = base64.b64encode(img_file.read()).decode()
+    
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpg;base64,{encoded_string}");
+            background-size: cover;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+add_bg_from_local("background.jpg")
 
 # ---------- Upload section ----------
 st.header("➕ Upload a new paper (PDF)")
